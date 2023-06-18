@@ -45,6 +45,7 @@ namespace OrderViewer.DAL.Repositories
                 {
                     Name = product.Name.Trim(),
                     Description = product.Description.Trim(),
+                    Price = product.Price,
                 });
                 _db.SaveChanges();
             }
@@ -90,6 +91,7 @@ namespace OrderViewer.DAL.Repositories
                     Id = product.Id,
                     Name = product.Name,
                     Description = product.Description,
+                    Price = product.Price,
                 };
             }
         }
@@ -109,6 +111,7 @@ namespace OrderViewer.DAL.Repositories
                     Id = product.Id,
                     Name = product.Name,
                     Description = product.Description,
+                    Price = product.Price,
                 };
             }
         }

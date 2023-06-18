@@ -36,8 +36,8 @@ namespace OrderViewer.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpPost("Add/{name}/{description}")]
-        public bool Add(string name, string description)
+        [HttpPost("Add/{name}/{description}/{price}")]
+        public bool Add(string name, string description, decimal price)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -46,10 +46,15 @@ namespace OrderViewer.WebApi.Controllers
             name = name.Trim();
             description = string.IsNullOrWhiteSpace(description) ?
                 "" : description.Trim();
+            if (price <= 0)
+            {
+                return false;
+            }
             Product product = new Product()
             {
                 Name = name,
-                Description = description
+                Description = description,
+                Price = price
             };
 
             return _productService.AddProduct(product);
@@ -104,9 +109,9 @@ namespace OrderViewer.WebApi.Controllers
         //}
 
         [Authorize]
-        [HttpPut("Update/{id}/{name}/{description}")]
+        [HttpPut("Update/{id}/{name}/{description}/{price}")]
         //public IActionResult Update(int id, [FromBody] Product product)
-        public IActionResult Update(int id, string name, string description)
+        public IActionResult Update(int id, string name, string description, decimal price)
         {
             //if (product == null || string.IsNullOrWhiteSpace(product.Name))
             //{
@@ -129,11 +134,16 @@ namespace OrderViewer.WebApi.Controllers
             name = name.Trim();
             description = string.IsNullOrWhiteSpace(description) ?
                 "" : description.Trim();
+            if (price <= 0)
+            {
+                return BadRequest();
+            }
             Product product = new Product()
             {
                 Id = id,
                 Name = name,
-                Description = description
+                Description = description,
+                Price = price
             };
 
             if (!_productService.UpdateProduct(product))
