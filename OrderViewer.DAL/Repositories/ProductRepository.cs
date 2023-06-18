@@ -10,14 +10,17 @@ namespace OrderViewer.DAL.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly ApplicationDBContext _db;
-        public ProductRepository() 
-        { 
-            _db = new ApplicationDBContext();
-        }
+        private ApplicationDBContext _db;
+        //public ProductRepository() 
+        //{ 
+        //    _db = new ApplicationDBContext();
+        //}
         public IEnumerable<Product> GetAllProduct()
         {
-            return _db.Product.ToArray();
+            using (_db = new ApplicationDBContext())
+            {
+                return _db.Product.ToArray();
+            }
         }
 
         public bool AddProduct(Product product)
@@ -36,12 +39,15 @@ namespace OrderViewer.DAL.Repositories
                 return false;
             }
 
-            _db.Product.Add(new Product()
+            using (_db = new ApplicationDBContext())
             {
-                Name = product.Name.Trim(),
-                Description = product.Description.Trim(),
-            });
-            _db.SaveChanges();
+                _db.Product.Add(new Product()
+                {
+                    Name = product.Name.Trim(),
+                    Description = product.Description.Trim(),
+                });
+                _db.SaveChanges();
+            }
 
             return true;
         }
@@ -54,8 +60,11 @@ namespace OrderViewer.DAL.Repositories
                 return false;
                 //throw new ArgumentNullException();
             }
-            _db.Product.Remove(product);
-            _db.SaveChanges();
+            using (_db = new ApplicationDBContext())
+            {
+                _db.Product.Remove(product);
+                _db.SaveChanges();
+            }
 
             return true;
         }
@@ -69,33 +78,39 @@ namespace OrderViewer.DAL.Repositories
 
         public Product GetProduct(int id)
         {
-            var product = _db.Product.FirstOrDefault(x => x.Id == id);
-            if (product == null)
+            using (_db = new ApplicationDBContext())
             {
-                return null;
+                var product = _db.Product.FirstOrDefault(x => x.Id == id);
+                if (product == null)
+                {
+                    return null;
+                }
+                return new Product()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                };
             }
-            return new Product()
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-            };
         }
 
         public Product GetProduct(string name)
         {
             name = name.Trim();
-            var product = _db.Product.FirstOrDefault(x => x.Name == name);
-            if (product == null)
+            using (_db = new ApplicationDBContext())
             {
-                return null;
+                var product = _db.Product.FirstOrDefault(x => x.Name == name);
+                if (product == null)
+                {
+                    return null;
+                }
+                return new Product()
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                };
             }
-            return new Product()
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-            };
         }
 
         public bool UpdateProduct(Product product)
@@ -110,9 +125,13 @@ namespace OrderViewer.DAL.Repositories
                 return false;
             }
 
-            product_old.Name = product.Name;
-            product_old.Description = product.Description;
-            _db.SaveChanges();
+            //product_old.Name = product.Name;
+            //product_old.Description = product.Description;
+            using (_db = new ApplicationDBContext())
+            {
+                _db.Product.Update(product);
+                _db.SaveChanges();
+            }
 
             return true;
         }

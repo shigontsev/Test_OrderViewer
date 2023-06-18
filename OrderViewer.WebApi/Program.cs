@@ -25,6 +25,9 @@ internal class Program
         builder.Services.AddScoped<IUserOrderRepository, UserOrderRepository>();
         builder.Services.AddScoped<IUserOrderService, UserOrderService>();
 
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IProductService, ProductService>();
+
         //builder.Services.AddDistributedMemoryCache();
         //builder.Services.AddSession();
 

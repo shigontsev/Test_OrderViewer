@@ -47,5 +47,14 @@ namespace OrderViewer.Service.Implementaitons
             return _userOrderRepository.GetUsers();
         }
 
+        public bool CreateOrder(int user_id, IEnumerable<Product> products)
+        {
+            return _userOrderRepository.CreateOrder(user_id, products);
+        }
+
+        public bool CreateOrder(string user_name, IEnumerable<Product> products)
+        {
+            return _userOrderRepository.CreateOrder(user_name, products);
+        }
     }
 }

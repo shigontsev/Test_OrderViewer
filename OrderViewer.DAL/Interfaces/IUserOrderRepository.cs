@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 
 namespace OrderViewer.DAL.Interfaces
 {
-    public interface IUserOrderRepository
+    public interface IUserOrderRepository : IUserRepository, IOrderRepository
     {
-        bool CreateUser(string login, string password);
+        //bool CreateUser(string login, string password);
 
-        bool IsAuthentication(string login, string password);
+        //bool IsAuthentication(string login, string password);
 
-        UserData GetUser(int id);
+        //UserData GetUser(int id);
 
-        UserData GetUser(string username);
+        //UserData GetUser(string username);
 
-        IEnumerable<UserData> GetUsers();
+        //IEnumerable<UserData> GetUsers();
+
+        //bool CreateOrder(IEnumerable<Product> products);
     }
 }

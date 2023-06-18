@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrderViewer.Service.Interfaces
+namespace OrderViewer.DAL.Interfaces
 {
-    public interface IUserOrderService
+    public interface IUserRepository
     {
         bool CreateUser(string login, string password);
 
@@ -18,9 +18,5 @@ namespace OrderViewer.Service.Interfaces
         UserData GetUser(string username);
 
         IEnumerable<UserData> GetUsers();
-
-        bool CreateOrder(int user_id, IEnumerable<Product> products);
-
-        bool CreateOrder(string user_name, IEnumerable<Product> products);
     }
 }
