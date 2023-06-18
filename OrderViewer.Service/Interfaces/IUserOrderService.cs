@@ -22,5 +22,11 @@ namespace OrderViewer.Service.Interfaces
         bool CreateOrder(int user_id, IEnumerable<Product> products);
 
         bool CreateOrder(string user_name, IEnumerable<Product> products);
+
+        IEnumerable<UserOrder> GetAllOrders();
+
+        IEnumerable<UserOrder> GetOrdersByUserId(int user_id);
+
+        IEnumerable<UserOrder> GetOrderById(int order_id);
     }
 }

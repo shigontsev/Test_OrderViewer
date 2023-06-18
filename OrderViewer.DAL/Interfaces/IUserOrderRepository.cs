@@ -20,5 +20,11 @@ namespace OrderViewer.DAL.Interfaces
         //IEnumerable<UserData> GetUsers();
 
         //bool CreateOrder(IEnumerable<Product> products);
+
+        IEnumerable<UserOrder> GetAllOrders();
+
+        IEnumerable<UserOrder> GetOrdersByUserId(int user_id);
+
+        IEnumerable<UserOrder> GetOrderById(int order_id);
     }
 }

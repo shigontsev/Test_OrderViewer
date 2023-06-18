@@ -102,7 +102,7 @@ namespace OrderViewer.DAL.Repositories
 
         public IEnumerable<UserData> GetUsers()
         {
-            using (var db = new ApplicationDBContext())
+            using (_db = new ApplicationDBContext())
             {
                 var users =
                     (IEnumerable<UserData>)(from u in _db.UserData
@@ -117,9 +117,10 @@ namespace OrderViewer.DAL.Repositories
 
         public bool CreateOrder(int user_id, IEnumerable<Product> products)
         {
-            using(var db = new ApplicationDBContext())
+            using(_db = new ApplicationDBContext())
             {
-                var user = GetUser(user_id);
+                //var user = GetUser(user_id);
+                var user = _db.UserData.FirstOrDefault(x=>x.Id == user_id);
                 if (user == null)
                 {
                     return false;
@@ -131,10 +132,21 @@ namespace OrderViewer.DAL.Repositories
 
                 //    }
                 //}
-                if (!products.All(x=>_db.Product.FirstOrDefault(y=>y.Id==x.Id) is not null)) 
-                {
-                    return false;
-                }
+                //using(var db = new ApplicationDBContext())
+                //{
+                    if (!products.All(x => _db.Product.FirstOrDefault(y => y.Id == x.Id) is not null))
+                    {
+                        return false;
+                    }
+                //}
+                //foreach (var item in products)
+                //{
+                //    var product = _db.Product.FirstOrDefault(y => y.Id == item.Id);
+                //    if (product == null)
+                //    {
+                //        return false;
+                //    }
+                //}
 
                 _db.Order.Add(new Order()
                 {
@@ -142,7 +154,11 @@ namespace OrderViewer.DAL.Repositories
                 });
                 _db.SaveChanges();
 
-                Order order = _db.Order.Last(x=>x.UserDataId == user_id);
+                Order order = _db.Order.OrderByDescending(p => p.Id).FirstOrDefault(x=>x.UserDataId == user_id);
+                if (order == null)
+                {
+                    return false;
+                }
                 foreach (var product in products)
                 {
                     _db.OrderProduct.Add(new OrderProduct()
@@ -162,6 +178,89 @@ namespace OrderViewer.DAL.Repositories
             UserData user = GetUser(user_name);
 
             return CreateOrder(user.Id, products);
+        }
+
+        public IEnumerable<UserOrder> GetAllOrders()
+        {
+            var orders = new List<UserOrder>();
+            using (_db = new ApplicationDBContext())
+            {
+                if (_db.OrderProduct.Count() > 0)
+                
+                    orders = (List<UserOrder>)
+                        (from user in _db.UserData
+                             join order in _db.Order on user.Id equals order.UserDataId  
+                             join op in _db.OrderProduct on order.Id equals op.OrderId
+                             join p in _db.Product on op.ProductId equals p.Id
+                             select new UserOrder
+                             {
+                                 Id = op.Id,
+                                 UserId = user.Id,
+                                 UserName = user.Name,
+                                 OrderId = order.Id,
+                                 ProductId = p.Id,
+                                 ProductName = p.Name,
+                                 Description = p.Description,
+                                 Price = p.Price
+                             }).ToList();
+                return orders;
+            }
+        }
+
+        public IEnumerable<UserOrder> GetOrdersByUserId(int user_id)
+        {
+            var orders = new List<UserOrder>();
+            using (_db = new ApplicationDBContext())
+            {
+                if (_db.OrderProduct.Count() > 0)
+
+                    orders = (List<UserOrder>)
+                        (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         where user_id == user.Id
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).ToList();
+                return orders;
+            }
+        }
+
+        public IEnumerable<UserOrder> GetOrderById(int order_id)
+        {
+            var result = new List<UserOrder>();
+            using (_db = new ApplicationDBContext())
+            {
+                if (_db.OrderProduct.Count() > 0)
+
+                    result = (List<UserOrder>)
+                        (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         where order_id == order.Id
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).ToList();
+                return result;
+            }
         }
     }
 }
