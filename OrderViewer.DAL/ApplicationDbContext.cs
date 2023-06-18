@@ -16,6 +16,8 @@ namespace OrderViewer.DAL
 
         public DbSet<Product> Product { get; set; } = null!;
 
+        public DbSet<OrderProduct> OrderProduct { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

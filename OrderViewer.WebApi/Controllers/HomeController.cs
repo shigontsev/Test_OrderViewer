@@ -67,6 +67,7 @@ namespace OrderViewer.WebApi.Controllers
             return resulte;
         }
 
+        [Authorize]
         [HttpPost("SignOut")]
         public bool SignOut()
         {

@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace OrderViewer.Common.Entities
 {
-    public class Order
+    public class OrderProduct
     {
         public int Id { get; set; }
 
-        public int? UserDataId { get; set; }
+        public int? OrderId { get; set; }
+
+        public int? ProductId { get; set; }
     }
 }
