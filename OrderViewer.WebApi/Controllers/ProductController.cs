@@ -30,7 +30,7 @@ namespace OrderViewer.WebApi.Controllers
         }
 
         [HttpGet("GetByName/{name}")]
-        public Product GetById(string name)
+        public Product GetByName(string name)
         {
             return _productService.GetProduct(name);
         }

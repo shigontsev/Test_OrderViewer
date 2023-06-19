@@ -28,6 +28,9 @@ internal class Program
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<IProductService, ProductService>();
 
+        builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+        builder.Services.AddScoped<ISearchService, SearchService>();
+
         //builder.Services.AddDistributedMemoryCache();
         //builder.Services.AddSession();
 
