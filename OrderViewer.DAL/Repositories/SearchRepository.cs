@@ -1,10 +1,5 @@
 ﻿using OrderViewer.Common.Entities;
 using OrderViewer.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderViewer.DAL.Repositories
 {
@@ -71,8 +66,6 @@ namespace OrderViewer.DAL.Repositories
                          join op in _db.OrderProduct on order.Id equals op.OrderId
                          join p in _db.Product on op.ProductId equals p.Id
                          where (user.Name.Contains(user_subName) && p.Name.Contains(product_subName))
-                         //orderby p.Price
-                         //group order by order.Id
                          select new UserOrder
                          {
                              Id = op.Id,
@@ -112,27 +105,6 @@ namespace OrderViewer.DAL.Repositories
                 return orders;
 
             }
-            //select new OrderInfoFull
-            //{
-            //    Id = g.Key,
-            //    UserId = g.First().UserDataId,
-            //    UserName = _db.UserData.FirstOrDefault(x=>x.Id == g.First().UserDataId).Name,
-            //    Products = new List<Product>()
-            //}
-
-            //select new UserOrder
-            //{
-            //    Id = op.Id,
-            //    UserId = user.Id,
-            //    UserName = user.Name,
-            //    OrderId = order.Id,
-            //    ProductId = p.Id,
-            //    ProductName = p.Name,
-            //    Description = p.Description,
-            //    Price = p.Price
-            //})
-
-            //throw new NotImplementedException();
         }
 
         public IEnumerable<Product> GetAllProduct()
@@ -147,29 +119,14 @@ namespace OrderViewer.DAL.Repositories
         {
             using (_db = new ApplicationDBContext())
             {
-                //var users =
-                //    (IEnumerable<UserData>)(from u in _db.UserData
-                //                            select new
-                //                            {
-                //                                Id = u.Id,
-                //                                Name = u.Name
-                //                            }).ToList();
                 var users = new List<UserData>();
-                users.AddRange(_db.UserData.Select(x=>new UserData()
+                users.AddRange(_db.UserData.Select(x => new UserData()
                 {
                     Id = x.Id,
                     Name = x.Name
                 }
                     ));
-                //foreach (var user in _db.UserData)
-                //{
-                //    users.Add(new UserData
-                //    {
-                //        Id = user.Id,
-                //        Name = user.Name
-                //    });
-                //}
-                
+
                 return users.ToList();
             }
         }

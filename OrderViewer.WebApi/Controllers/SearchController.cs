@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderViewer.Common.Entities;
-using OrderViewer.Service.Implementaitons;
 using OrderViewer.Service.Interfaces;
 
 namespace OrderViewer.WebApi.Controllers

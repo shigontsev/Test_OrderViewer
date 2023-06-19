@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OrderViewer.DAL.Repositories;
-using OrderViewer.Service.Implementaitons;
 using OrderViewer.Service.Interfaces;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -21,16 +17,6 @@ namespace OrderViewer.WebApi.Controllers
         {
             _userOrderService = userOrderService;
         }
-        //public HomeController()
-        //{
-        //    _userOrderService = new UserOrderService( new UserOrderRepository());
-        //}
-
-        //[HttpGet("SignUp")]
-        //public IActionResult SignUp()
-        //{
-
-        //}
 
         /// <summary>
         /// Регистрация
@@ -60,10 +46,8 @@ namespace OrderViewer.WebApi.Controllers
             var resulte = _userOrderService.IsAuthentication(name.Trim(), password.Trim());
             if (resulte)
             {
-                //context.Session.SetString("name", "Tom");
                 Authenticate(name);
             }
-            //FormsAuthentication.SetAuthCookie(name, createPersistentCookie: true);
             return resulte;
         }
 
@@ -74,15 +58,6 @@ namespace OrderViewer.WebApi.Controllers
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return true;
         }
-
-        //[Authorize]
-        //[HttpPost("NameAuth")]
-        //public string NameAuth()
-        //{
-        //    //HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            
-        //    return User.Identity.Name==null?"Никто не зареган": User.Identity.Name;
-        //}
 
 
         private void Authenticate(string userName)

@@ -1,11 +1,6 @@
 ﻿using OrderViewer.Common.Entities;
 using OrderViewer.DAL.Interfaces;
 using OrderViewer.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderViewer.Service.Implementaitons
 {

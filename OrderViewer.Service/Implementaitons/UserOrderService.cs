@@ -13,10 +13,6 @@ namespace OrderViewer.Service.Implementaitons
     {
         private readonly IUserOrderRepository _userOrderRepository;
 
-        //public CarService(ICarRepository carRepository)
-        //{
-        //    _userOrderRepository = carRepository;
-        //}
         public UserOrderService(IUserOrderRepository userOrderRepository) 
         {
             _userOrderRepository = userOrderRepository;
@@ -56,25 +52,6 @@ namespace OrderViewer.Service.Implementaitons
         {
             return _userOrderRepository.CreateOrder(user_name, products);
         }
-
-        #region errais 
-        public IEnumerable<UserOrder> GetAllOrders()
-        {
-            return _userOrderRepository.GetAllOrders();
-        }
-
-        public IEnumerable<UserOrder> GetOrdersByUserId(int user_id)
-        {
-            return _userOrderRepository.GetOrdersByUserId(user_id);
-        }
-
-        public IEnumerable<UserOrder> GetOrderById(int order_id)
-        {
-            return _userOrderRepository.GetOrderById(order_id);
-        }
-
-        #endregion errais 
-
 
         public IEnumerable<OrderInfoShort> GetAllOrdersShort()
         {
