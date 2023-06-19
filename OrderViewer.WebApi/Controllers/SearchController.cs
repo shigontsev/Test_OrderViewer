@@ -65,5 +65,31 @@ namespace OrderViewer.WebApi.Controllers
         {
             return _searchService.GetProductsBySubName(name);
         }
+
+        [HttpGet("FiltrUserProductBySubName/{user_subName}/{product_subName}")]
+        public IActionResult FiltrUserProductBySubName(string user_subName, string product_subName)
+        {
+            if (string.IsNullOrWhiteSpace(user_subName))
+            {
+                user_subName = string.Empty;
+            }
+            if (string.IsNullOrWhiteSpace(product_subName))
+            {
+                product_subName = string.Empty;
+            }
+            var result = _searchService.FiltrUserProductBySubName(user_subName, product_subName);
+
+
+            return Ok(result);
+        }
+
+        [HttpGet("FiltrUserProductById/{user_id}/{product_id}")]
+        public IActionResult FiltrUserProductById(int user_id, int product_id)
+        {
+            var result = _searchService.FiltrUserProductById(user_id, product_id);
+
+
+            return Ok(result);
+        }
     }
 }

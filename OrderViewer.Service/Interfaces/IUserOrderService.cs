@@ -23,10 +23,20 @@ namespace OrderViewer.Service.Interfaces
 
         bool CreateOrder(string user_name, IEnumerable<Product> products);
 
+        #region errais 
         IEnumerable<UserOrder> GetAllOrders();
 
         IEnumerable<UserOrder> GetOrdersByUserId(int user_id);
 
         IEnumerable<UserOrder> GetOrderById(int order_id);
+        #endregion errais 
+
+        IEnumerable<OrderInfoShort> GetAllOrdersShort();
+
+        IEnumerable<OrderInfoFull> GetAllOrdersFull();
+
+        IEnumerable<OrderInfoShort> GetAllOrdersShortByUserId(int user_id);
+
+        IEnumerable<OrderInfoFull> GetAllOrdersFullByUserId(int user_id);
     }
 }

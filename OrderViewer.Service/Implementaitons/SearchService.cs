@@ -56,5 +56,15 @@ namespace OrderViewer.Service.Implementaitons
         {
             return _searchRepository.GetUsersBySubName(name);
         }
+
+        public IEnumerable<OrderInfoFull> FiltrUserProductBySubName(string user_subName, string product_subName)
+        {
+            return _searchRepository.FiltrUserProductBySubName(user_subName, product_subName);
+        }
+
+        public IEnumerable<OrderInfoFull> FiltrUserProductById(int user_id, int product_id)
+        {
+            return _searchRepository.FiltrUserProductById(user_id, product_id);
+        }
     }
 }
