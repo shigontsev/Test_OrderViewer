@@ -180,6 +180,8 @@ namespace OrderViewer.DAL.Repositories
             return CreateOrder(user.Id, products);
         }
 
+
+        #region errais 
         public IEnumerable<UserOrder> GetAllOrders()
         {
             var orders = new List<UserOrder>();
@@ -260,6 +262,186 @@ namespace OrderViewer.DAL.Repositories
                              Price = p.Price
                          }).ToList();
                 return result;
+            }
+        }
+
+        #endregion errais 
+
+        public IEnumerable<OrderInfoShort> GetAllOrdersShort()
+        {
+            using (_db = new ApplicationDBContext())
+            {
+                var a = (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).GroupBy(x => x.OrderId);
+
+                var orders = new List<OrderInfoShort>();
+                foreach (var g in a)
+                {
+                    var ori = new OrderInfoShort()
+                    {
+                        Id = g.Key,
+                        UserId = g.First().UserId,
+                        UserName = g.First().UserName,
+                        Count = g.Count(),
+                        Sum = g.Sum(x => x.Price)
+                    };
+                    orders.Add(ori);
+                }
+
+                return orders.OrderBy(x=>x.Sum);
+
+            }
+        }
+
+        public IEnumerable<OrderInfoFull> GetAllOrdersFull()
+        {
+            using (_db = new ApplicationDBContext())
+            {
+                var a = (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).GroupBy(x => x.OrderId);
+
+                var orders = new List<OrderInfoFull>();
+                foreach (var g in a)
+                {
+                    var ori = new OrderInfoFull()
+                    {
+                        Id = g.Key,
+                        UserId = g.First().UserId,
+                        UserName = g.First().UserName,
+                        Products = new List<Product>()
+                    };
+                    foreach (var item in g)
+                    {
+                        ori.Products.Add(new Product()
+                        {
+                            Id = item.ProductId,
+                            Name = item.ProductName,
+                            Description = item.Description,
+                            Price = item.Price,
+                        });
+                    }
+                    ori.Products = ori.Products.OrderBy(x => x.Price).ToList();
+                    orders.Add(ori);
+                }
+
+                return orders;
+
+            }
+        }
+
+        public IEnumerable<OrderInfoShort> GetAllOrdersShortByUserId(int user_id)
+        {
+            using (_db = new ApplicationDBContext())
+            {
+                var a = (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         where (user.Id == user_id)
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).GroupBy(x => x.OrderId);
+
+                var orders = new List<OrderInfoShort>();
+                foreach (var g in a)
+                {
+                    var ori = new OrderInfoShort()
+                    {
+                        Id = g.Key,
+                        UserId = g.First().UserId,
+                        UserName = g.First().UserName,
+                        Count = g.Count(),
+                        Sum = g.Sum(x => x.Price)
+                    };
+                    orders.Add(ori);
+                }
+
+                return orders.OrderBy(x => x.Sum);
+
+            }
+        }
+
+        public IEnumerable<OrderInfoFull> GetAllOrdersFullByUserId(int user_id)
+        {
+            using (_db = new ApplicationDBContext())
+            {
+                var a = (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         where (user.Id == user_id)
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).GroupBy(x => x.OrderId);
+
+                var orders = new List<OrderInfoFull>();
+                foreach (var g in a)
+                {
+                    var ori = new OrderInfoFull()
+                    {
+                        Id = g.Key,
+                        UserId = g.First().UserId,
+                        UserName = g.First().UserName,
+                        Products = new List<Product>()
+                    };
+                    foreach (var item in g)
+                    {
+                        ori.Products.Add(new Product()
+                        {
+                            Id = item.ProductId,
+                            Name = item.ProductName,
+                            Description = item.Description,
+                            Price = item.Price,
+                        });
+                    }
+                    ori.Products = ori.Products.OrderBy(x => x.Price).ToList();
+                    orders.Add(ori);
+                }
+
+                return orders;
+
             }
         }
     }

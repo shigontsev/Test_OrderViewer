@@ -24,5 +24,9 @@ namespace OrderViewer.Service.Interfaces
         IEnumerable<Product> GetProductsBySubName(string name);
 
         IEnumerable<UserData> GetUsersBySubName(string name);
+
+        IEnumerable<OrderInfoFull> FiltrUserProductBySubName(string user_subName, string product_subName);
+
+        IEnumerable<OrderInfoFull> FiltrUserProductById(int user_id, int product_id);
     }
 }

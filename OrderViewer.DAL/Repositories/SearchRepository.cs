@@ -12,6 +12,129 @@ namespace OrderViewer.DAL.Repositories
     {
         private ApplicationDBContext _db;
 
+        public IEnumerable<OrderInfoFull> FiltrUserProductById(int user_id, int product_id)
+        {
+            using (_db = new ApplicationDBContext())
+            {
+                var a = (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         where (user.Id == user_id && p.Id == product_id)
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).GroupBy(x => x.OrderId);
+
+                var orders = new List<OrderInfoFull>();
+                foreach (var g in a)
+                {
+                    var ori = new OrderInfoFull()
+                    {
+                        Id = g.Key,
+                        UserId = g.First().UserId,
+                        UserName = g.First().UserName,
+                        Products = new List<Product>()
+                    };
+                    foreach (var item in g)
+                    {
+                        ori.Products.Add(new Product()
+                        {
+                            Id = item.ProductId,
+                            Name = item.ProductName,
+                            Description = item.Description,
+                            Price = item.Price,
+                        });
+                    }
+                    ori.Products = ori.Products.OrderBy(x => x.Price).ToList();
+                    orders.Add(ori);
+                }
+
+                return orders;
+
+            }
+        }
+
+        public IEnumerable<OrderInfoFull> FiltrUserProductBySubName(string user_subName, string product_subName)
+        {
+            using(_db = new ApplicationDBContext())
+            {
+                var a = (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         where (user.Name.Contains(user_subName) && p.Name.Contains(product_subName))
+                         //orderby p.Price
+                         //group order by order.Id
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).GroupBy(x => x.OrderId);
+
+                var orders = new List<OrderInfoFull>();
+                foreach (var g in a)
+                {
+                    var ori = new OrderInfoFull()
+                    {
+                        Id = g.Key,
+                        UserId = g.First().UserId,
+                        UserName = g.First().UserName,
+                        Products = new List<Product>()
+                    };
+                    foreach (var item in g)
+                    {
+                        ori.Products.Add(new Product()
+                        {
+                            Id = item.ProductId,
+                            Name = item.ProductName,
+                            Description = item.Description,
+                            Price = item.Price,
+                        });
+                    }
+                    ori.Products = ori.Products.OrderBy(x => x.Price).ToList();
+                    orders.Add(ori);
+                }
+
+                return orders;
+
+            }
+            //select new OrderInfoFull
+            //{
+            //    Id = g.Key,
+            //    UserId = g.First().UserDataId,
+            //    UserName = _db.UserData.FirstOrDefault(x=>x.Id == g.First().UserDataId).Name,
+            //    Products = new List<Product>()
+            //}
+
+            //select new UserOrder
+            //{
+            //    Id = op.Id,
+            //    UserId = user.Id,
+            //    UserName = user.Name,
+            //    OrderId = order.Id,
+            //    ProductId = p.Id,
+            //    ProductName = p.Name,
+            //    Description = p.Description,
+            //    Price = p.Price
+            //})
+
+            //throw new NotImplementedException();
+        }
+
         public IEnumerable<Product> GetAllProduct()
         {
             using (_db = new ApplicationDBContext())

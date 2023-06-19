@@ -57,6 +57,7 @@ namespace OrderViewer.Service.Implementaitons
             return _userOrderRepository.CreateOrder(user_name, products);
         }
 
+        #region errais 
         public IEnumerable<UserOrder> GetAllOrders()
         {
             return _userOrderRepository.GetAllOrders();
@@ -70,6 +71,29 @@ namespace OrderViewer.Service.Implementaitons
         public IEnumerable<UserOrder> GetOrderById(int order_id)
         {
             return _userOrderRepository.GetOrderById(order_id);
+        }
+
+        #endregion errais 
+
+
+        public IEnumerable<OrderInfoShort> GetAllOrdersShort()
+        {
+            return _userOrderRepository.GetAllOrdersShort();
+        }
+
+        public IEnumerable<OrderInfoFull> GetAllOrdersFull()
+        {
+            return _userOrderRepository.GetAllOrdersFull();
+        }
+
+        public IEnumerable<OrderInfoShort> GetAllOrdersShortByUserId(int user_id)
+        {
+            return _userOrderRepository.GetAllOrdersShortByUserId(user_id);
+        }
+
+        public IEnumerable<OrderInfoFull> GetAllOrdersFullByUserId(int user_id)
+        {
+            return _userOrderRepository.GetAllOrdersFullByUserId(user_id);
         }
     }
 }

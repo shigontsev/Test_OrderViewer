@@ -33,6 +33,8 @@ namespace OrderViewer.WebApi.Controllers
             return Ok(products);
         }
 
+
+        #region errais 
         [HttpGet("GetListOrders")]
         public IActionResult GetListOrders()
         {
@@ -139,6 +141,54 @@ namespace OrderViewer.WebApi.Controllers
             }
 
             return Ok(order);
+        }
+
+        #endregion errais 
+
+        [Authorize]
+        [HttpGet("GetAllOrdersShort")]
+        public IActionResult GetAllOrdersShort()
+        {
+            var result = _userOrderService.GetAllOrdersShort();
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("GetAllOrdersFull")]
+        public IActionResult GetAllOrdersFull()
+        {
+            var result = _userOrderService.GetAllOrdersFull();
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("GetAllOrdersShortByUserId/{user_id}")]
+        public IActionResult GetAllOrdersShortByUserId(int user_id)
+        {
+            var result = _userOrderService.GetAllOrdersShortByUserId(user_id);
+
+            if (result is null || result.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("GetAllOrdersFullByUserId/{user_id}")]
+        public IActionResult GetAllOrdersFullByUserId(int user_id)
+        {
+            var result = _userOrderService.GetAllOrdersFullByUserId(user_id);
+
+            if (result is null || result.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
     }
 }
