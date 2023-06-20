@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderViewer.Common.Entities;
 using OrderViewer.Service.Interfaces;
-using OrderViewer.WebApi.ViewModels;
 
 namespace OrderViewer.WebApi.Controllers
 {
@@ -18,6 +16,24 @@ namespace OrderViewer.WebApi.Controllers
             _userOrderService = userOrderService;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        /// <example>
+        /// Example Value
+        ///     Schema
+        ///     [
+        ///         {
+        ///             "id": 1,
+        ///         },
+        ///         {
+        ///             "id": 1,
+        ///         }
+        ///     ]
+        /// </example>
         [Authorize]
         [HttpPost("AddOrder")]
         public IActionResult AddOrder(IEnumerable<Product> products)
@@ -33,117 +49,19 @@ namespace OrderViewer.WebApi.Controllers
             return Ok(products);
         }
 
-
-        #region errais 
-        [HttpGet("GetListOrders")]
-        public IActionResult GetListOrders()
-        {
-            //var ord = _userOrderService.GetOrdersByUserId(user_id);
-            //var ord = _userOrderService.GetAllOrders();
-            var orders_t = (from or in _userOrderService.GetAllOrders()
-                            group or by or.OrderId).ToList();
-            if (orders_t == null || orders_t.Count < 1)
-            {
-                return BadRequest();
-            }
-
-            var orders = new List<OrderViewModel>();
-            foreach (var g in orders_t)
-            {
-                var vm = new OrderViewModel()
-                {
-                    Id = g.Key,
-                    UserId = g.First().UserId,
-                    UserName = g.First().UserName,
-                    Products = new List<Product>()
-                };
-                foreach (var item in g)
-                {
-                    vm.Products.Add(new Product()
-                    {
-                        Id = item.ProductId,
-                        Name = item.ProductName,
-                        Description = item.Description,
-                        Price = item.Price,
-                    });
-                }
-                orders.Add(vm);
-            }
-
-            return Ok(orders);
-        }
-
-        [HttpGet("GetListOrdersByUserId/{user_id}")]
-        public IActionResult GetListOrdersByUserId(int user_id)
-        {
-            //var ord = _userOrderService.GetOrdersByUserId(user_id);
-            //var ord = _userOrderService.GetAllOrders();
-            var orders_t = (from or in _userOrderService.GetOrdersByUserId(user_id)
-                         group or by or.OrderId).ToList();
-            if (orders_t == null || orders_t.Count < 1)
-            {
-                return BadRequest();
-            }
-
-            var orders = new List<OrderViewModel>();
-            foreach (var g in orders_t) 
-            {
-                var vm = new OrderViewModel()
-                {
-                    Id = g.Key,
-                    UserId = g.First().UserId,
-                    UserName = g.First().UserName,
-                    Products = new List<Product>()
-                };
-                foreach (var item in g.OrderBy(p=>p.Price))
-                {
-                    vm.Products.Add(new Product()
-                    {
-                        Id = item.ProductId,
-                        Name = item.ProductName,
-                        Description = item.Description,
-                        Price = item.Price,
-                    });
-                }
-                orders.Add(vm);
-            }
-
-            return Ok(orders);
-        }
-
+        [Authorize]
         [HttpGet("GetOrderById/{order_id}")]
-        public IActionResult GetOrdersById(int order_id)
+        public IActionResult GetOrderById(int order_id)
         {
-            //var order_t = (from or in _userOrderService.GetOrderById(order_id)
-                            //group or by or.OrderId);
-            var order_t = _userOrderService.GetOrderById(order_id).OrderBy(p=>p.Price).ToList();
-            if (order_t == null || order_t.Count < 1)
+            var result = _userOrderService.GetOrderById(order_id);
+
+            if (result is null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var order = new OrderViewModel()
-            {
-                Id = order_t.First().OrderId,
-                UserId = order_t.First().UserId,
-                UserName = order_t.First().UserName,
-                Products = new List<Product>()
-            };
-            foreach (var pr in order_t)
-            {
-                order.Products.Add(new Product()
-                {
-                    Id = pr.ProductId,
-                    Name = pr.ProductName,
-                    Description = pr.Description,
-                    Price = pr.Price,
-                });
-            }
-
-            return Ok(order);
+            return Ok(result);
         }
-
-        #endregion errais 
 
         [Authorize]
         [HttpGet("GetAllOrdersShort")]

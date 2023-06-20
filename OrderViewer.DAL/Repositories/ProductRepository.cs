@@ -1,20 +1,12 @@
 ﻿using OrderViewer.Common.Entities;
 using OrderViewer.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderViewer.DAL.Repositories
 {
     public class ProductRepository : IProductRepository
     {
         private ApplicationDBContext _db;
-        //public ProductRepository() 
-        //{ 
-        //    _db = new ApplicationDBContext();
-        //}
+
         public IEnumerable<Product> GetAllProduct()
         {
             using (_db = new ApplicationDBContext())
@@ -28,7 +20,6 @@ namespace OrderViewer.DAL.Repositories
             if (product == null)
             {
                 return false;
-                //throw new ArgumentNullException();
             }
             if (string.IsNullOrWhiteSpace(product.Name))
             {
@@ -59,7 +50,6 @@ namespace OrderViewer.DAL.Repositories
             if (product == null)
             {
                 return false;
-                //throw new ArgumentNullException();
             }
             using (_db = new ApplicationDBContext())
             {
@@ -128,8 +118,6 @@ namespace OrderViewer.DAL.Repositories
                 return false;
             }
 
-            //product_old.Name = product.Name;
-            //product_old.Description = product.Description;
             using (_db = new ApplicationDBContext())
             {
                 _db.Product.Update(product);

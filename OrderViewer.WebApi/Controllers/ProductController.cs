@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderViewer.Common.Entities;
 using OrderViewer.Service.Interfaces;
@@ -24,20 +23,32 @@ namespace OrderViewer.WebApi.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public Product GetById(int id)
+        public IActionResult GetById(int id)
         {
-            return _productService.GetProduct(id);
+            var product = _productService.GetProduct(id);
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
         }
 
         [HttpGet("GetByName/{name}")]
-        public Product GetByName(string name)
+        public IActionResult GetByName(string name)
         {
-            return _productService.GetProduct(name);
+            var product = _productService.GetProduct(name);
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
         }
 
         [Authorize]
         [HttpPost("Add/{name}/{description}/{price}")]
-        public bool Add(string name, string description, decimal price)
+        public bool Add(string name, string? description, decimal price)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -60,73 +71,10 @@ namespace OrderViewer.WebApi.Controllers
             return _productService.AddProduct(product);
         }
 
-        //[Authorize]
-        //[HttpGet("Update/{id}")]
-        //public bool Update(int id)
-        //{
-        //    Product product = _productService.GetProduct(id);
-        //    if (product == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    return Update(product.Id, product.Name, product.Description);
-        //    //return RedirectToAction("Update", new { id = product.Id, name = product.Name, description = product.Description });
-        //}
-
-        //[Authorize]
-        //[HttpPut("Update/{id}/{name}/{description}")]
-        //public bool Update(int id, string name, string description)
-        //{
-        //    if (string.IsNullOrWhiteSpace(name))
-        //    {
-        //        return false;
-        //    }
-        //    name = name.Trim();
-        //    description = string.IsNullOrWhiteSpace(description) ?
-        //        "" : description.Trim();
-        //    Product product = new Product()
-        //    {
-        //        Name = name,
-        //        Description = description
-        //    };
-
-        //    return _productService.UpdateProduct(product);
-        //}
-
-        //[Authorize]
-        //[HttpGet("Update/{id}")]
-        //public bool Update(int id)
-        //{
-        //    Product product = _productService.GetProduct(id);
-        //    if (product == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    return Update(product.Id, product.Name, product.Description);
-        //    //return RedirectToAction("Update", new { id = product.Id, name = product.Name, description = product.Description });
-        //}
-
         [Authorize]
         [HttpPut("Update/{id}/{name}/{description}/{price}")]
-        //public IActionResult Update(int id, [FromBody] Product product)
-        public IActionResult Update(int id, string name, string description, decimal price)
+        public IActionResult Update(int id, string name, string? description, decimal price)
         {
-            //if (product == null || string.IsNullOrWhiteSpace(product.Name))
-            //{
-            //    return BadRequest();
-            //}
-
-            //product.Id = id;
-            //bool result = _productService.UpdateProduct(product);
-
-            //if (!result)
-            //{
-            //    return NotFound();
-            //}
-
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest();

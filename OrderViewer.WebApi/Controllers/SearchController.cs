@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderViewer.Common.Entities;
-using OrderViewer.Service.Implementaitons;
 using OrderViewer.Service.Interfaces;
 
 namespace OrderViewer.WebApi.Controllers
@@ -24,15 +22,27 @@ namespace OrderViewer.WebApi.Controllers
         }
 
         [HttpGet("GetUserById/{id}")]
-        public UserData GetUserById(int id)
+        public IActionResult GetUserById(int id)
         {
-            return _searchService.GetUser(id);
+            var user = _searchService.GetUser(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         [HttpGet("GetUserByName/{name}")]
-        public UserData GetUserByName(string name)
+        public IActionResult GetUserByName(string name)
         {
-            return _searchService.GetUser(name);
+            var user = _searchService.GetUser(name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
 
@@ -43,31 +53,53 @@ namespace OrderViewer.WebApi.Controllers
         }
 
         [HttpGet("GetProductById/{id}")]
-        public Product GetProductById(int id)
+        public IActionResult GetProductById(int id)
         {
-            return _searchService.GetProduct(id);
+            var product = _searchService.GetProduct(id);
+            if (product == null)
+            {
+                return NotFound();
+            }    
+
+            return Ok(product);
         }
 
         [HttpGet("GetProductByName/{name}")]
-        public Product GetProductByName(string name)
+        public IActionResult GetProductByName(string name)
         {
-            return _searchService.GetProduct(name);
+            var product = _searchService.GetProduct(name);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
         }
 
         [HttpGet("GetUsersBySubName/{name}")]
-        public IEnumerable<UserData> GetUsersBySubName(string name)
+        public IEnumerable<UserData> GetUsersBySubName(string? name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = string.Empty;
+            }
+
             return _searchService.GetUsersBySubName(name);
         }
 
         [HttpGet("GetProductsBySubName/{name}")]
-        public IEnumerable<Product> GetProductsBySubName(string name)
+        public IEnumerable<Product> GetProductsBySubName(string? name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = string.Empty;
+            }
+
             return _searchService.GetProductsBySubName(name);
         }
 
         [HttpGet("FiltrUserProductBySubName/{user_subName}/{product_subName}")]
-        public IActionResult FiltrUserProductBySubName(string user_subName, string product_subName)
+        public IActionResult FiltrUserProductBySubName(string? user_subName, string? product_subName)
         {
             if (string.IsNullOrWhiteSpace(user_subName))
             {

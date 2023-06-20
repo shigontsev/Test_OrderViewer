@@ -17,10 +17,7 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        //builder.Services.AddTransient<IUserOrderService, UserOrderService>();
-
-        //builder.Services.AddSingleton<IUserOrderService, UserOrderService>();
-        //builder.Services.AddSingleton<IUserOrderService, UserOrderService>();
+        
 
         builder.Services.AddScoped<IUserOrderRepository, UserOrderRepository>();
         builder.Services.AddScoped<IUserOrderService, UserOrderService>();

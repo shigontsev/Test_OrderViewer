@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OrderViewer.DAL.Repositories;
-using OrderViewer.Service.Implementaitons;
 using OrderViewer.Service.Interfaces;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -21,16 +17,6 @@ namespace OrderViewer.WebApi.Controllers
         {
             _userOrderService = userOrderService;
         }
-        //public HomeController()
-        //{
-        //    _userOrderService = new UserOrderService( new UserOrderRepository());
-        //}
-
-        //[HttpGet("SignUp")]
-        //public IActionResult SignUp()
-        //{
-
-        //}
 
         /// <summary>
         /// Регистрация
@@ -52,37 +38,30 @@ namespace OrderViewer.WebApi.Controllers
         /// <param name="name"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        [HttpPost("Login")]
-        public bool Login(string name, string password)
+        /// Example input field
+        ///     name : admin
+        ///     password : admin
+        /// </example>
+        [HttpPost("LogIn")]
+        public bool LogIn(string name, string password)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return false;
             var resulte = _userOrderService.IsAuthentication(name.Trim(), password.Trim());
             if (resulte)
             {
-                //context.Session.SetString("name", "Tom");
                 Authenticate(name);
             }
-            //FormsAuthentication.SetAuthCookie(name, createPersistentCookie: true);
             return resulte;
         }
 
         [Authorize]
-        [HttpPost("SignOut")]
-        public bool SignOut()
+        [HttpPost("LogOut")]
+        public bool LogOut()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return true;
         }
-
-        //[Authorize]
-        //[HttpPost("NameAuth")]
-        //public string NameAuth()
-        //{
-        //    //HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            
-        //    return User.Identity.Name==null?"Никто не зареган": User.Identity.Name;
-        //}
 
 
         private void Authenticate(string userName)
