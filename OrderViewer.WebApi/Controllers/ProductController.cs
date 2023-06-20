@@ -23,20 +23,32 @@ namespace OrderViewer.WebApi.Controllers
         }
 
         [HttpGet("GetById/{id}")]
-        public Product GetById(int id)
+        public IActionResult GetById(int id)
         {
-            return _productService.GetProduct(id);
+            var product = _productService.GetProduct(id);
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
         }
 
         [HttpGet("GetByName/{name}")]
-        public Product GetByName(string name)
+        public IActionResult GetByName(string name)
         {
-            return _productService.GetProduct(name);
+            var product = _productService.GetProduct(name);
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
         }
 
         [Authorize]
         [HttpPost("Add/{name}/{description}/{price}")]
-        public bool Add(string name, string description, decimal price)
+        public bool Add(string name, string? description, decimal price)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -61,7 +73,7 @@ namespace OrderViewer.WebApi.Controllers
 
         [Authorize]
         [HttpPut("Update/{id}/{name}/{description}/{price}")]
-        public IActionResult Update(int id, string name, string description, decimal price)
+        public IActionResult Update(int id, string name, string? description, decimal price)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

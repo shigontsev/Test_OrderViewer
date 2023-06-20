@@ -1,11 +1,6 @@
 ﻿using OrderViewer.Common.Entities;
 using OrderViewer.DAL.Interfaces;
 using OrderViewer.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderViewer.Service.Implementaitons
 {
@@ -71,6 +66,11 @@ namespace OrderViewer.Service.Implementaitons
         public IEnumerable<OrderInfoFull> GetAllOrdersFullByUserId(int user_id)
         {
             return _userOrderRepository.GetAllOrdersFullByUserId(user_id);
+        }
+
+        public OrderInfoFull GetOrderById(int order_id)
+        {
+            return _userOrderRepository.GetOrderById(order_id);
         }
     }
 }

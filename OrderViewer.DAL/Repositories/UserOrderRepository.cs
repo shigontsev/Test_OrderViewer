@@ -305,5 +305,53 @@ namespace OrderViewer.DAL.Repositories
 
             }
         }
+
+        public OrderInfoFull GetOrderById(int order_id)
+        {
+            using (_db = new ApplicationDBContext())
+            {
+                var a = (from user in _db.UserData
+                         join order in _db.Order on user.Id equals order.UserDataId
+                         join op in _db.OrderProduct on order.Id equals op.OrderId
+                         join p in _db.Product on op.ProductId equals p.Id
+                         where (order.Id == order_id)
+                         select new UserOrder
+                         {
+                             Id = op.Id,
+                             UserId = user.Id,
+                             UserName = user.Name,
+                             OrderId = order.Id,
+                             ProductId = p.Id,
+                             ProductName = p.Name,
+                             Description = p.Description,
+                             Price = p.Price
+                         }).OrderBy(p=>p.Price).ToList();
+
+                if (a == null || a.Count == 0)
+                {
+                    return null;
+                }
+
+                var ori = new OrderInfoFull()
+                {
+                    Id = a.First().OrderId,
+                    UserId = a.First().UserId,
+                    UserName = a.First().UserName,
+                    Products = new List<Product>()
+                };
+                foreach (var item in a)
+                {
+                    ori.Products.Add(new Product()
+                    {
+                        Id = item.ProductId,
+                        Name = item.ProductName,
+                        Description = item.Description,
+                        Price = item.Price,
+                    });
+                }
+
+                return ori;
+            }
+        }
     }
 }

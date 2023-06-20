@@ -4,6 +4,8 @@ namespace OrderViewer.DAL.Interfaces
 {
     public interface IUserOrderRepository : IUserRepository, IOrderRepository
     {
+        OrderInfoFull GetOrderById(int order_id);
+
         IEnumerable<OrderInfoShort> GetAllOrdersShort();
 
         IEnumerable<OrderInfoFull> GetAllOrdersFull();

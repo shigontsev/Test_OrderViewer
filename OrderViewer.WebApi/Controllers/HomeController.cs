@@ -38,8 +38,12 @@ namespace OrderViewer.WebApi.Controllers
         /// <param name="name"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        [HttpPost("Login")]
-        public bool Login(string name, string password)
+        /// Example input field
+        ///     name : admin
+        ///     password : admin
+        /// </example>
+        [HttpPost("LogIn")]
+        public bool LogIn(string name, string password)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return false;
@@ -52,8 +56,8 @@ namespace OrderViewer.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpPost("SignOut")]
-        public bool SignOut()
+        [HttpPost("LogOut")]
+        public bool LogOut()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return true;

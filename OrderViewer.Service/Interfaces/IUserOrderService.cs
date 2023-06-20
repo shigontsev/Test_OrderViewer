@@ -18,6 +18,8 @@ namespace OrderViewer.Service.Interfaces
 
         bool CreateOrder(string user_name, IEnumerable<Product> products);
 
+        OrderInfoFull GetOrderById(int order_id);
+
         IEnumerable<OrderInfoShort> GetAllOrdersShort();
 
         IEnumerable<OrderInfoFull> GetAllOrdersFull();

@@ -16,6 +16,24 @@ namespace OrderViewer.WebApi.Controllers
             _userOrderService = userOrderService;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        /// <example>
+        /// Example Value
+        ///     Schema
+        ///     [
+        ///         {
+        ///             "id": 1,
+        ///         },
+        ///         {
+        ///             "id": 1,
+        ///         }
+        ///     ]
+        /// </example>
         [Authorize]
         [HttpPost("AddOrder")]
         public IActionResult AddOrder(IEnumerable<Product> products)
@@ -29,6 +47,20 @@ namespace OrderViewer.WebApi.Controllers
             }
 
             return Ok(products);
+        }
+
+        [Authorize]
+        [HttpGet("GetOrderById/{order_id}")]
+        public IActionResult GetOrderById(int order_id)
+        {
+            var result = _userOrderService.GetOrderById(order_id);
+
+            if (result is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
 
         [Authorize]
