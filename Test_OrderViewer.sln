@@ -19,7 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{179EEF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderViewer.Common.Entities", "OrderViewer.Common.Entities\OrderViewer.Common.Entities.csproj", "{004451A1-906E-4651-9FFD-7973289ADC5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderViewer.Common.Helpers", "OrderViewer.Common.Helpers\OrderViewer.Common.Helpers.csproj", "{BAC5EEF0-F50D-4764-AA25-F2206E0E866D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderViewer.Common.Helpers", "OrderViewer.Common.Helpers\OrderViewer.Common.Helpers.csproj", "{BAC5EEF0-F50D-4764-AA25-F2206E0E866D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlSript", "SqlSript", "{2C9DBC83-2D93-4797-86CF-CFCF3D1F836C}"
+	ProjectSection(SolutionItems) = preProject
+		SqlSript\Test_OrderViewer_DB.sql = SqlSript\Test_OrderViewer_DB.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
